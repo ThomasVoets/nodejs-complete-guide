@@ -1,3 +1,7 @@
 {
-  "editor.formatOnSave": true
+  // Editor Settings
+  "editor.formatOnSave": true,
+
+  // Prettier Settings
+  "prettier.singleQuote": true
 }
