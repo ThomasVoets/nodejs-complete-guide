@@ -1,0 +1,8 @@
+{
+  // Editor Settings
+  "editor.formatOnSave": true,
+
+  // Prettier Settings
+  "prettier.singleQuote": true,
+  "prettier.arrowParens": "avoid"
+}
