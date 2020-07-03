@@ -9,5 +9,8 @@
     "start-server": "node app.js"
   },
   "author": "Thomas Voets",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
 }
