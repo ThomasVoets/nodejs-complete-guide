@@ -1,0 +1,12 @@
+{
+    // Editor Settings
+    "editor.formatOnSave": true,
+    "[html]": {
+        "editor.formatOnSave": false
+    },
+
+    // Prettier Settings
+    "prettier.singleQuote": true,
+    "prettier.arrowParens": "avoid",
+    "prettier.tabWidth": 4
+}
