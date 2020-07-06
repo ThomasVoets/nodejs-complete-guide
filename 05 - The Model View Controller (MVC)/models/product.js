@@ -25,10 +25,12 @@ module.exports = class Product {
     });
   }
 
-  static fetchAll() {
+  static fetchAll(callback) {
     fs.readFile(filePath, (err, fileContent) => {
-      if (err) return [];
-      return JSON.parse(fileContent);
+      if (err) {
+        callback([]);
+      }
+      callback(JSON.parse(fileContent));
     });
   }
 };
