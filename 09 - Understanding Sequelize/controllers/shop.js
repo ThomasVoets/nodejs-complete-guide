@@ -32,12 +32,12 @@ exports.getProducts = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
   const productId = req.params.productId;
 
-  Product.findById(productId)
-    .then(([product]) => {
+  Product.findAll({ where: { id: productId } })
+    .then(products => {
       res.render('shop/product-detail', {
-        pageTitle: product[0].title,
+        pageTitle: products[0].title,
         path: '/products',
-        product: product[0],
+        product: products[0],
       });
     })
     .catch(err => {
