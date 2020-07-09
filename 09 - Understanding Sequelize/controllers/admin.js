@@ -1,12 +1,12 @@
 const Product = require('../models/product');
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldData]) => {
+  Product.findAll()
+    .then(products => {
       res.render('admin/product-list', {
         pageTitle: 'Admin Products',
         path: '/admin/products',
-        products: rows,
+        products: products,
       });
     })
     .catch(err => {
