@@ -25,6 +25,18 @@ app.set('views', 'views');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Add a 'Dummy User' to the request
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
@@ -34,8 +46,17 @@ Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Product); // This is optional
 
 sequelize
-  .sync({ force: true })
+  .sync()
   .then(result => {
+    return User.findByPk(1);
+  })
+  .then(user => {
+    if (!user) {
+      return User.create({ name: 'Thomas', email: 'test@email.com' });
+    }
+    return Promise.resolve(user);
+  })
+  .then(user => {
     app.listen(3000);
   })
   .catch(err => {
