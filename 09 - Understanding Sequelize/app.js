@@ -53,18 +53,29 @@ Cart.belongsTo(User);
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
 
+let userExists;
+
 sequelize
-  .sync({ force: true })
+  .sync()
   .then(result => {
     return User.findByPk(1);
   })
   .then(user => {
     if (!user) {
+      userExists = false;
       return User.create({ name: 'Thomas', email: 'test@email.com' });
     }
+    userExists = true;
     return Promise.resolve(user);
   })
   .then(user => {
+    if (!userExists) {
+      return user.createCart();
+    } else {
+      return Promise.resolve(user.getCart());
+    }
+  })
+  .then(cart => {
     app.listen(3000);
   })
   .catch(err => {
