@@ -3,7 +3,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const mongoConnect = require('./util/database');
+const mongoConnect = require('./util/database').mongoConnect;
 
 // Set environment variables
 const dotenv = require('dotenv');
@@ -32,6 +32,6 @@ app.use('/admin', adminRoutes);
 
 app.use(errorController.get404);
 
-mongoConnect(client => {
+mongoConnect(() => {
   app.listen(3000);
 });
