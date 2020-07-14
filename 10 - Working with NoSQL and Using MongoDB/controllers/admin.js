@@ -49,14 +49,13 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect('/');
   }
 
-  req.user
-    .getProducts({ where: { id: productId } })
-    .then(products => {
+  Product.findById(productId)
+    .then(product => {
       res.render('admin/edit-product', {
         pageTitle: 'Edit Product',
         path: '/admin/edit-product',
         editing: editMode,
-        product: products[0],
+        product: product,
       });
     })
     .catch(err => {
