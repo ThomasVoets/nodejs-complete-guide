@@ -59,6 +59,20 @@ class User {
       });
   }
 
+  deleteItemFromCart(id) {
+    const db = getDb();
+    const updatedCartItems = this.cart.items.filter(
+      i => i.productId.toString() !== id.toString()
+    );
+
+    return db
+      .collection('users')
+      .updateOne(
+        { _id: this._id },
+        { $set: { cart: { items: updatedCartItems } } }
+      );
+  }
+
   static findById(id) {
     const db = getDb();
     return db.collection('users').findOne({ _id: new mongodb.ObjectId(id) });
