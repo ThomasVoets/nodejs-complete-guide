@@ -16,12 +16,25 @@ class User {
   }
 
   addToCart(product) {
-    // const cartProductIndex = this.cart.items.findIndex(
-    //   p => p._id === product._id
-    // );
-
     const db = getDb();
-    const updatedCart = { items: [{ productId: product._id, quantity: 1 }] };
+    const updatedCartItems = [...this.cart.items];
+    let newQuantity = 1;
+
+    const cartProductIndex = this.cart.items.findIndex(
+      p => p.productId.toString() === product._id.toString()
+    );
+
+    if (cartProductIndex >= 0) {
+      const cartProduct = this.cart.items[cartProductIndex];
+      newQuantity = cartProduct.quantity + 1;
+      updatedCartItems[cartProductIndex].quantity = newQuantity;
+    } else {
+      updatedCartItems.push({ productId: product._id, quantity: newQuantity });
+    }
+
+    const updatedCart = {
+      items: updatedCartItems,
+    };
 
     return db
       .collection('users')
