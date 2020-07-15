@@ -97,7 +97,7 @@ class User {
 
   getOrders() {
     const db = getDb();
-    return db.collection('orders');
+    return db.collection('orders').find({ 'user._id': this._id }).toArray();
   }
 
   static findById(id) {
