@@ -9,6 +9,8 @@ const mongoConnect = require('./util/database').mongoConnect;
 const dotenv = require('dotenv');
 dotenv.config();
 
+const User = require('./models/user');
+
 const errorController = require('./controllers/error');
 
 const adminRoutes = require('./routes/admin');
@@ -24,7 +26,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Add a 'Dummy User' to the request
 app.use((req, res, next) => {
-  next();
+  User.findById('5f0d99e20fe8012944919c68')
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => {
+      console.log(err);
+    });
 });
 
 app.use('/admin', adminRoutes);
