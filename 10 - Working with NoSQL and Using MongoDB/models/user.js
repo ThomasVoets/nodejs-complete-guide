@@ -73,6 +73,19 @@ class User {
       );
   }
 
+  addOrder() {
+    const db = getDb();
+    return db
+      .collection('orders')
+      .insertOne(this.cart)
+      .then(result => {
+        this.cart = { items: [] };
+        return db
+          .collection('users')
+          .updateOne({ _id: this._id }, { $set: { cart: { items: [] } } });
+      });
+  }
+
   static findById(id) {
     const db = getDb();
     return db.collection('users').findOne({ _id: new mongodb.ObjectId(id) });
