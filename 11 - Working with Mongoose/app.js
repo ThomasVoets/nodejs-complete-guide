@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
 
-// const User = require('./models/user');
+const User = require('./models/user');
 
 const errorController = require('./controllers/error');
 
@@ -25,7 +25,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Add a 'Dummy User' to the request
 app.use((req, res, next) => {
-  next();
+  User.findById('5f10586c99f65259d42c98a7')
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => {
+      console.log(err);
+    });
 });
 
 app.use('/admin', adminRoutes);
@@ -39,8 +46,19 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(result => {
-    console.log('Connected to MongoDB via Mongoose');
+    User.findOne().then(user => {
+      if (!user) {
+        const user = new User({
+          name: 'Thomas',
+          email: 'thomas@test.com',
+          cart: { items: [] },
+        });
+        user.save();
+      }
+    });
+
     app.listen(3000);
+    console.log('Connected to MongoDB via Mongoose');
   })
   .catch(err => {
     console.log(err);
