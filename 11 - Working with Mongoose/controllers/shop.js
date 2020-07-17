@@ -1,5 +1,6 @@
 const Product = require('../models/product');
 const Order = require('../models/order');
+const order = require('../models/order');
 
 exports.getIndex = (req, res, next) => {
   Product.find()
@@ -91,8 +92,9 @@ exports.postCartDeleteProduct = (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
-  req.user
-    .getOrders()
+  Order.find({ 'user.userId': req.user._id })
+    .populate('user.userId', 'name email')
+    .exec()
     .then(orders => {
       res.render('shop/orders', {
         pageTitle: 'Orders',
