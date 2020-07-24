@@ -40,18 +40,6 @@ app.use(
   })
 );
 
-// Add a 'Dummy User' to the request
-app.use((req, res, next) => {
-  User.findById('5f10586c99f65259d42c98a7')
-    .then(user => {
-      req.user = user;
-      next();
-    })
-    .catch(err => {
-      console.log(err);
-    });
-});
-
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
