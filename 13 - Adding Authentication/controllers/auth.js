@@ -16,13 +16,11 @@ exports.postLogin = (req, res, next) => {
 
   User.findOne({ email: email })
     .then(user => {
-      console.log(user);
       if (!user) return res.redirect('/login');
 
       bcrypt
         .compare(password, user.password)
         .then(doMatch => {
-          console.log(doMatch);
           if (doMatch) {
             req.session.isLoggedIn = true;
             req.session.user = user;
@@ -33,6 +31,7 @@ exports.postLogin = (req, res, next) => {
               res.redirect('/');
             });
           }
+
           res.redirect('/login');
         })
         .catch(err => {
