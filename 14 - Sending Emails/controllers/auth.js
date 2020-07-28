@@ -1,7 +1,9 @@
 const bcrypt = require('bcryptjs');
+const sendgridMail = require('@sendgrid/mail');
 
 const User = require('../models/user');
-const { use } = require('../routes/shop');
+
+sendgridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash('error');
