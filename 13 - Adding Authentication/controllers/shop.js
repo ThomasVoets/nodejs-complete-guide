@@ -92,7 +92,7 @@ exports.postCartDeleteProduct = (req, res, next) => {
 
 exports.getOrders = (req, res, next) => {
   Order.find({ 'user.userId': req.user._id })
-    .populate('user.userId', 'name email')
+    .populate('user.userId', 'email')
     .exec()
     .then(orders => {
       res.render('shop/orders', {
@@ -107,7 +107,7 @@ exports.getOrders = (req, res, next) => {
 };
 
 exports.postOrder = (req, res, next) => {
-  req.session.user
+  req.user
     .populate('cart.items.productId')
     .execPopulate()
     .then(user => {
@@ -116,14 +116,14 @@ exports.postOrder = (req, res, next) => {
       });
 
       const order = new Order({
-        user: { userId: req.session.user },
+        user: { userId: req.user },
         products: products,
       });
 
       return order.save();
     })
     .then(result => {
-      return req.session.user.clearCart();
+      return req.user.clearCart();
     })
     .then(() => {
       res.redirect('/orders');

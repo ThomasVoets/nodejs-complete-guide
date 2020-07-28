@@ -12,7 +12,7 @@
             <ul class="orders">
                 <% orders.forEach(order => { %>
                     <li class="orders__item">
-                        <h1>Order from <%= order.user.userId.name %> -  # <%= order._id %></h1>
+                        <h1>Order from <%= order.user.userId.email %> -  # <%= order._id %></h1>
                         <ul class="orders__products">
                             <% order.products.forEach(orderProduct => { %>
                                 <li class="orders__products-item"><%= orderProduct.product.title %> (<%= orderProduct.quantity %>)</li>
