@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const mongodbSession = require('connect-mongodb-session');
 const csrf = require('csurf');
+const flash = require('connect-flash');
 
 // Set environment variables
 const dotenv = require('dotenv');
@@ -42,6 +43,7 @@ app.use(
   })
 );
 app.use(csrfProtection);
+app.use(flash());
 
 app.use((req, res, next) => {
   if (!req.session.user) return next();
