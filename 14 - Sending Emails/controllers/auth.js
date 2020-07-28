@@ -104,6 +104,14 @@ exports.postSignup = (req, res, next) => {
           return user.save();
         })
         .then(result => {
+          const message = {
+            to: email,
+            from: 'ThomasV.Development@gmail.com',
+            subject: 'Signup succeeded',
+            html: '<h1>You successfully signed up!</h1>',
+          };
+
+          sendgridMail.send(message);
           res.redirect('/login');
         });
     })
