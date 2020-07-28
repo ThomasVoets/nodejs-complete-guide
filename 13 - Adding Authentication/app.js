@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const mongodbSession = require('connect-mongodb-session');
+const csrf = require('csurf');
 
 // Set environment variables
 const dotenv = require('dotenv');
@@ -25,6 +26,7 @@ const store = new MongoDBStore({
   uri: process.env.MONGODB_URI,
   collection: 'sessions',
 });
+const csrfProtection = csrf();
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -39,6 +41,7 @@ app.use(
     store: store,
   })
 );
+app.use(csrfProtection);
 
 app.use((req, res, next) => {
   if (!req.session.user) return next();
