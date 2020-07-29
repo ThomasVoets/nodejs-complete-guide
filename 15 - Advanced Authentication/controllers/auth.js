@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const bcrypt = require('bcryptjs');
 const sendgridMail = require('@sendgrid/mail');
 
@@ -142,5 +144,51 @@ exports.getReset = (req, res, next) => {
     path: '/reset',
     pageTitle: 'Reset Password',
     errorMessage: message,
+  });
+};
+
+exports.postReset = (req, res, next) => {
+  const email = req.body.email;
+
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+      return res.redirect('/reset');
+    }
+
+    const token = buffer.toString('hex');
+
+    User.findOne({ email: email })
+      .then(user => {
+        if (!user) {
+          req.flash('error', 'No account with that email found!');
+          return res.redirect('/reset');
+        }
+
+        user.resetToken = token;
+        user.resetTokenExpiration = Date.now() + 3600000;
+        user
+          .save()
+          .then(result => {
+            const message = {
+              to: email,
+              from: 'ThomasV.Development@gmail.com',
+              subject: 'Password reset',
+              html: `
+              <p>You requested a password reset.</p>
+              <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
+            `,
+            };
+
+            sendgridMail.send(message);
+            res.redirect('/');
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   });
 };
