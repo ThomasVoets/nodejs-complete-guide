@@ -80,6 +80,7 @@ exports.getSignup = (req, res, next) => {
     pageTitle: 'Signup',
     path: '/signup',
     isAuthenticated: false,
+    validationErrors: [],
     errorMessage: message,
     oldInput: {
       email: '',
@@ -104,6 +105,7 @@ exports.postSignup = (req, res, next) => {
       pageTitle: 'Signup',
       path: '/signup',
       isAuthenticated: false,
+      validationErrors: errorMessages,
       errorMessage: message,
       oldInput: {
         email: email,
