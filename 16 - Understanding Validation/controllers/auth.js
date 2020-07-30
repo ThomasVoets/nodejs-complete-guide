@@ -91,8 +91,6 @@ exports.postSignup = (req, res, next) => {
     const errorMessages = errors.array();
     const message = errorMessages[0].msg;
 
-    console.log(message);
-
     return res.status(422).render('auth/Signup', {
       pageTitle: 'Signup',
       path: '/signup',
