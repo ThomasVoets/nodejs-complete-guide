@@ -9,7 +9,26 @@ const router = express.Router();
 
 router.get('/login', authController.getLogin);
 
-router.post('/login', authController.postLogin);
+router.post(
+  '/login',
+  [
+    body('email')
+      .isEmail()
+      .withMessage('Please enter a valid email')
+      .custom((value, { req }) => {
+        return User.findOne({ email: value }).then(user => {
+          if (!user) return Promise.reject('Invalid email or password');
+        });
+      }),
+    body(
+      'password',
+      'Please enter a 5 character long password with only numbers and text'
+    )
+      .isLength({ min: 5 })
+      .isAlphanumeric(),
+  ],
+  authController.postLogin
+);
 
 router.get('/signup', authController.getSignup);
 
