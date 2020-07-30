@@ -2,6 +2,7 @@ const crypto = require('crypto');
 
 const bcrypt = require('bcryptjs');
 const sendgridMail = require('@sendgrid/mail');
+const { validationResult } = require('express-validator');
 
 const User = require('../models/user');
 
@@ -83,6 +84,21 @@ exports.postSignup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const message = errors.array();
+
+    console.log(message);
+
+    return res.status(422).render('auth/Signup', {
+      pageTitle: 'Signup',
+      path: '/signup',
+      isAuthenticated: false,
+      errorMessage: message,
+    });
+  }
 
   User.findOne({ email: email })
     .then(userDoc => {
