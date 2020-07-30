@@ -88,7 +88,8 @@ exports.postSignup = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    const message = errors.array();
+    const errorMessages = errors.array();
+    const message = errorMessages[0].msg;
 
     console.log(message);
 
