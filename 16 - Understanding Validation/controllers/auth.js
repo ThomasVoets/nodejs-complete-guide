@@ -35,7 +35,7 @@ exports.postLogin = (req, res, next) => {
     const errorMessages = errors.array();
     const message = errorMessages[0].msg;
 
-    return res.render('auth/login', {
+    return res.status(422).render('auth/login', {
       pageTitle: 'Login',
       path: '/login',
       isAuthenticated: false,
@@ -81,12 +81,18 @@ exports.getSignup = (req, res, next) => {
     path: '/signup',
     isAuthenticated: false,
     errorMessage: message,
+    oldInput: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
   });
 };
 
 exports.postSignup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
 
   const errors = validationResult(req);
 
@@ -99,6 +105,11 @@ exports.postSignup = (req, res, next) => {
       path: '/signup',
       isAuthenticated: false,
       errorMessage: message,
+      oldInput: {
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword,
+      },
     });
   }
 
