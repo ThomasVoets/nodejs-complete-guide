@@ -21,7 +21,9 @@ exports.getLogin = (req, res, next) => {
     pageTitle: 'Login',
     path: '/login',
     isAuthenticated: false,
+    validationErrors: [],
     errorMessage: message,
+    oldInput: { email: '', password: '' },
   });
 };
 
@@ -39,7 +41,9 @@ exports.postLogin = (req, res, next) => {
       pageTitle: 'Login',
       path: '/login',
       isAuthenticated: false,
+      validationErrors: errorMessages,
       errorMessage: message,
+      oldInput: { email: email, password: password },
     });
   }
 
@@ -56,8 +60,14 @@ exports.postLogin = (req, res, next) => {
             res.redirect('/');
           });
         } else {
-          req.flash('error', 'Invalid email or password');
-          res.redirect('/login');
+          res.status(422).render('auth/login', {
+            pageTitle: 'Login',
+            path: '/login',
+            isAuthenticated: false,
+            validationErrors: [{ param: 'email' }, { param: 'password' }],
+            errorMessage: 'Invalid email or password',
+            oldInput: { email: email, password: password },
+          });
         }
       });
     })
