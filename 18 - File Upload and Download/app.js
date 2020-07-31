@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const { v4: uuidv4 } = require('uuid');
 const mongodbSession = require('connect-mongodb-session');
 const csrf = require('csurf');
 const flash = require('connect-flash');
@@ -24,17 +25,28 @@ const authRoutes = require('./routes/auth');
 const MongoDBStore = mongodbSession(session);
 
 const app = express();
+
 const store = new MongoDBStore({
   uri: process.env.MONGODB_URI,
   collection: 'sessions',
 });
+
 const csrfProtection = csrf();
+
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images'); // first argument is the error
+  },
+  filename: (req, file, cb) => {
+    cb(null, uuidv4() + '-' + file.originalname);
+  },
+});
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(multer({ dest: 'images' }).single('image'));
+app.use(multer({ storage: fileStorage }).single('image'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   session({
