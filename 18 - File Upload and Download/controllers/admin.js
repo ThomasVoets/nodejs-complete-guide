@@ -33,9 +33,11 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
-  const imageFile = req.body.image;
+  const imageFile = req.file;
   const price = req.body.price;
   const description = req.body.description;
+
+  console.log(imageFile);
 
   const errors = validationResult(req);
 

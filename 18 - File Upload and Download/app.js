@@ -2,6 +2,7 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const mongodbSession = require('connect-mongodb-session');
@@ -33,6 +34,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(multer({ dest: 'images' }).single('image'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   session({
