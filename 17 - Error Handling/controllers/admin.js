@@ -1,8 +1,6 @@
-const mongoose = require('mongoose');
 const { validationResult } = require('express-validator');
 
 const Product = require('../models/product');
-const { request } = require('express');
 
 exports.getProducts = (req, res, next) => {
   const userId = req.user._id;
@@ -62,7 +60,6 @@ exports.postAddProduct = (req, res, next) => {
   }
 
   const product = new Product({
-    _id: new mongoose.Types.ObjectId('5f22ab66a8169f4d68f4c631'),
     title: title,
     imageUrl: imageUrl,
     price: price,
@@ -93,6 +90,11 @@ exports.getEditProduct = (req, res, next) => {
 
   Product.findById(productId)
     .then(product => {
+      if (!product) {
+        // Can do: Flash an error message
+        return res.redirect('/');
+      }
+
       res.render('admin/edit-product', {
         pageTitle: 'Edit Product',
         path: '/admin/edit-product',
