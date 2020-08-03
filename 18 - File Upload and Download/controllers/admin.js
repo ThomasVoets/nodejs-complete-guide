@@ -33,11 +33,25 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
-  const imageFile = req.file;
+  const image = req.file;
   const price = req.body.price;
   const description = req.body.description;
 
-  console.log(imageFile);
+  if (!image) {
+    return res.status(422).render('admin/edit-product', {
+      pageTitle: 'Add Product',
+      path: '/admin/add-product',
+      editing: false,
+      hasError: true,
+      validationErrors: [],
+      errorMessage: 'Attached file is not an image',
+      product: {
+        title: title,
+        price: price,
+        description: description,
+      },
+    });
+  }
 
   const errors = validationResult(req);
 
@@ -54,12 +68,13 @@ exports.postAddProduct = (req, res, next) => {
       errorMessage: message,
       product: {
         title: title,
-        imageUrl: imageUrl,
         price: price,
         description: description,
       },
     });
   }
+
+  const imageUrl = image.path;
 
   const product = new Product({
     title: title,
@@ -118,7 +133,7 @@ exports.postEditProduct = (req, res, next) => {
   const userId = req.user._id;
   const productId = req.body.productId;
   const updatedTitle = req.body.title;
-  const updatedImageUrl = req.body.imageUrl;
+  const image = req.file;
   const updatedPrice = req.body.price;
   const updatedDescription = req.body.description;
 
@@ -138,7 +153,6 @@ exports.postEditProduct = (req, res, next) => {
       product: {
         _id: productId,
         title: updatedTitle,
-        imageUrl: updatedImageUrl,
         price: updatedPrice,
         description: updatedDescription,
       },
@@ -152,9 +166,12 @@ exports.postEditProduct = (req, res, next) => {
       }
 
       product.title = updatedTitle;
-      product.imageUrl = updatedImageUrl;
       product.price = updatedPrice;
       product.description = updatedDescription;
+
+      if (image) {
+        product.imageUrl = image.path;
+      }
 
       return product.save().then(result => {
         console.log('Updated Product');
