@@ -4,7 +4,6 @@ const path = require('path');
 const { validationResult } = require('express-validator/check');
 
 const Post = require('../models/post');
-const router = require('../routes/feed');
 
 exports.getPosts = (req, res, next) => {
   const currentPage = req.query.page || 1;
@@ -21,13 +20,11 @@ exports.getPosts = (req, res, next) => {
         .limit(perPage);
     })
     .then(posts => {
-      res
-        .status(200)
-        .json({
-          message: 'Fetched posts successfully',
-          posts: posts,
-          totalItems: totalItems,
-        });
+      res.status(200).json({
+        message: 'Fetched posts successfully',
+        posts: posts,
+        totalItems: totalItems,
+      });
     })
     .catch(err => {
       if (!err.statusCode) {
