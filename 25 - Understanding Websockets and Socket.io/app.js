@@ -63,7 +63,7 @@ mongoose
   .connect('mongodb://localhost:27017/node-messages')
   .then(result => {
     const server = app.listen(8080);
-    const io = require('socket.io')(server);
+    const io = require('./socket').init(server);
 
     io.on('connection', socket => {
       console.log('Client connected');
