@@ -1,0 +1,14 @@
+{
+  // Editor Settings
+  "editor.formatOnSave": true,
+  "editor.renameOnType": true,
+  "[html]": {
+    "editor.formatOnSave": false
+  },
+
+  // Prettier Settings
+  "prettier.singleQuote": true,
+  "prettier.arrowParens": "avoid",
+  "prettier.tabWidth": 2,
+  "prettier.trailingComma": "none"
+}
