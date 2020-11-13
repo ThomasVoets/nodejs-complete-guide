@@ -3,14 +3,10 @@ const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
   const authHeader = req.get('Authorization');
 
-  console.log(authHeader, !authHeader);
-
   if (!authHeader) {
     req.isAuth = false;
     return next();
   }
-
-  console.log('DO I GET HERE??');
 
   const token = authHeader.split(' ')[1];
   let decodedToken;
