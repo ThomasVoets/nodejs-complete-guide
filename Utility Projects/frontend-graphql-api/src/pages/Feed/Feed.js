@@ -214,12 +214,10 @@ class Feed extends Component {
       })
       .then(resData => {
         if (resData.errors && resData.errors[0].status === 422) {
-          throw new Error(
-            "Validation failed. Make sure the email address isn't used yet!"
-          );
+          throw new Error('Validation failed. Make sure the input is valid');
         }
         if (resData.errors) {
-          throw new Error('User login failed!');
+          throw new Error('Something went wrong');
         }
         console.log(resData);
         let resDataField = 'createPost';
@@ -242,7 +240,9 @@ class Feed extends Component {
             );
             updatedPosts[postIndex] = post;
           } else {
-            updatedPosts.pop();
+            if (prevState.posts.length >= 2) {
+              updatedPosts.pop();
+            }
             updatedPosts.unshift(post);
           }
           return {
