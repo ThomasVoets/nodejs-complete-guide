@@ -20,10 +20,12 @@ const authRoutes = require('./routes/auth');
 
 const MongoDBStore = mongodbSession(session);
 
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@shopdb.cgl4z.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`;
+
 const app = express();
 
 const store = new MongoDBStore({
-  uri: process.env.MONGODB_URI,
+  uri: MONGODB_URI,
   collection: 'sessions',
 });
 
@@ -107,12 +109,12 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect(process.env.MONGODB_URI, {
+  .connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(result => {
-    app.listen(3000);
+    app.listen(process.env.PORT || 3000);
     console.log('Connected to MongoDB via Mongoose');
   })
   .catch(err => {
