@@ -1,5 +1,9 @@
 node_modules
 
-# Hide environment variables
+# Environment variables
 .env
 nodemon.json
+
+## SSL
+server.cert
+server.key
