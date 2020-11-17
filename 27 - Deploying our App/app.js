@@ -10,6 +10,7 @@ const mongodbSession = require('connect-mongodb-session');
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const helmet = require('helmet');
+const compression = require('compression');
 
 const User = require('./models/user');
 
@@ -57,6 +58,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 app.use(helmet());
+app.use(compression());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
