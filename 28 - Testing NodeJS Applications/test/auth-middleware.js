@@ -1,4 +1,6 @@
 const expect = require('chai').expect;
+const jwt = require('jsonwebtoken');
+const sinon = require('sinon');
 
 const authMiddleware = require('../middleware/isAuth');
 
@@ -50,7 +52,15 @@ describe('Auth middleware', function () {
     const res = {};
     const next = () => {};
 
+    sinon.stub(jwt, 'verify');
+    jwt.verify.returns({ userId: 'abc' });
+
     authMiddleware(req, res, next);
+
+    expect(jwt.verify.called).to.be.true;
     expect(req).to.have.property('userId');
+    expect(req).to.have.property('userId', 'abc');
+
+    jwt.verify.restore();
   });
 });
