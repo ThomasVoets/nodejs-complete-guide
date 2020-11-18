@@ -56,11 +56,19 @@ describe('Auth Controller', function () {
               },
             };
 
-            AuthController.getUserStatus(req, res, () => {}).then(() => {
-              expect(res.statusCode).to.be.equal(200);
-              expect(res.userStatus).to.be.equal('I am new!');
-              done();
-            });
+            AuthController.getUserStatus(req, res, () => {})
+              .then(() => {
+                expect(res.statusCode).to.be.equal(200);
+                expect(res.userStatus).to.be.equal('I am new!');
+
+                return User.deleteMany({});
+              })
+              .then(() => {
+                return mongoose.disconnect();
+              })
+              .then(() => {
+                done();
+              });
           })
           .catch(err => console.log(err));
       });
