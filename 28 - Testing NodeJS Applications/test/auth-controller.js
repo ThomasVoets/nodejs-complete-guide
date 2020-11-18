@@ -29,7 +29,7 @@ describe('Auth Controller', function () {
     });
 
     describe('User status', function () {
-      it('should send a response with a valid user status for an existing user', function (done) {
+      before(function (done) {
         mongoose
           .connect('mongodb://localhost:27017/node-messages-test')
           .then(result => {
@@ -43,34 +43,43 @@ describe('Auth Controller', function () {
             return user.save();
           })
           .then(() => {
-            const req = { userId: '5fae398fbd417346a4abbd2c' };
-            const res = {
-              statusCode: 500,
-              userStatus: null,
-              status: function (code) {
-                this.statusCode = code;
-                return this;
-              },
-              json: function (data) {
-                this.userStatus = data.status;
-              },
-            };
+            done();
+          });
+      });
 
-            AuthController.getUserStatus(req, res, () => {})
-              .then(() => {
-                expect(res.statusCode).to.be.equal(200);
-                expect(res.userStatus).to.be.equal('I am new!');
-
-                return User.deleteMany({});
-              })
-              .then(() => {
-                return mongoose.disconnect();
-              })
-              .then(() => {
-                done();
-              });
+      after(function (done) {
+        User.deleteMany({})
+          .then(() => {
+            return mongoose.disconnect();
           })
-          .catch(err => console.log(err));
+          .then(() => {
+            done();
+          });
+      });
+
+      beforeEach(function () {});
+
+      afterEach(function () {});
+
+      it('should send a response with a valid user status for an existing user', function (done) {
+        const req = { userId: '5fae398fbd417346a4abbd2c' };
+        const res = {
+          statusCode: 500,
+          userStatus: null,
+          status: function (code) {
+            this.statusCode = code;
+            return this;
+          },
+          json: function (data) {
+            this.userStatus = data.status;
+          },
+        };
+
+        AuthController.getUserStatus(req, res, () => {}).then(() => {
+          expect(res.statusCode).to.be.equal(200);
+          expect(res.userStatus).to.be.equal('I am new!');
+          done();
+        });
       });
     });
   });
