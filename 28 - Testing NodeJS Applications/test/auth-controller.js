@@ -34,15 +34,33 @@ describe('Auth Controller', function () {
           .connect('mongodb://localhost:27017/node-messages-test')
           .then(result => {
             const user = new User({
+              _id: '5fae398fbd417346a4abbd2c',
               email: 'test@test.com',
-              passwordw: 'tester',
+              password: 'tester',
               name: 'Test',
               posts: [],
             });
             return user.save();
           })
           .then(() => {
-            // Test Logic...
+            const req = { userId: '5fae398fbd417346a4abbd2c' };
+            const res = {
+              statusCode: 500,
+              userStatus: null,
+              status: function (code) {
+                this.statusCode = code;
+                return this;
+              },
+              json: function (data) {
+                this.userStatus = data.status;
+              },
+            };
+
+            AuthController.getUserStatus(req, res, () => {}).then(() => {
+              expect(res.statusCode).to.be.equal(200);
+              expect(res.userStatus).to.be.equal('I am new!');
+              done();
+            });
           })
           .catch(err => console.log(err));
       });
