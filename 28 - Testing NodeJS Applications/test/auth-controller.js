@@ -31,7 +31,10 @@ describe('Auth Controller', function () {
     describe('User status', function () {
       before(function (done) {
         mongoose
-          .connect('mongodb://localhost:27017/node-messages-test')
+          .connect('mongodb://localhost:27017/node-messages-test', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+          })
           .then(result => {
             const user = new User({
               _id: '5fae398fbd417346a4abbd2c',
