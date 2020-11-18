@@ -4,7 +4,7 @@
   "description": "Working with REST APIs - The Basics",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "nodemon app.js",
     "mongodb": "\"C:/\"Program Files\"/MongoDb/Server/4.2/bin/mongod.exe\" --dbpath c:/MongoDb/data"
   },
@@ -21,6 +21,8 @@
     "uuid": "^8.3.1"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1",
     "nodemon": "^2.0.4"
   }
 }
