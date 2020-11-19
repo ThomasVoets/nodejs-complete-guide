@@ -1,3 +1,4 @@
+"use strict";
 var num1Element = document.getElementById('num1');
 var num2Element = document.getElementById('num2');
 var buttonElement = document.querySelector('button');
