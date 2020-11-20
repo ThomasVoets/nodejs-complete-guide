@@ -9,5 +9,8 @@
   // Prettier Settings
   "prettier.singleQuote": true,
   "prettier.arrowParens": "avoid",
-  "prettier.tabWidth": 2
+  "prettier.tabWidth": 2,
+
+  // Deno
+  "deno.enable": true
 }
