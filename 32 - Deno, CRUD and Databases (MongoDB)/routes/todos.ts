@@ -14,10 +14,11 @@ router.get('/todos', ctx => {
 });
 
 router.post('/todos', async (ctx: any) => {
-  const data = await ctx.request.body();
+  const data = await ctx.request.body().value;
+  
   const newTodo: Todo = {
     id: new Date().toISOString(),
-    text: data.value.text,
+    text: data.text,
   };
 
   todos.push(newTodo);
@@ -27,11 +28,11 @@ router.post('/todos', async (ctx: any) => {
 
 router.put('/todos/:todoId', async (ctx: any) => {
   const tid = ctx.params.todoId;
-  const data = await ctx.request.body();
+  const data = await ctx.request.body().value;
   const todoIndex = todos.findIndex(todo => {
     return todo.id === tid;
   });
-  todos[todoIndex] = { id: todos[todoIndex].id, text: data.value.text };
+  todos[todoIndex] = { id: todos[todoIndex].id, text: data.text };
   ctx.response.body = { message: 'Updated todo' };
 });
 
