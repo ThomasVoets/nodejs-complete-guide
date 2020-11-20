@@ -1,5 +1,7 @@
 import { Router } from 'https://deno.land/x/oak/mod.ts';
 
+import { getDb } from '../helpers/db_client.ts';
+
 const router = new Router();
 
 interface Todo {
@@ -15,7 +17,7 @@ router.get('/todos', ctx => {
 
 router.post('/todos', async (ctx: any) => {
   const data = await ctx.request.body().value;
-  
+
   const newTodo: Todo = {
     id: new Date().toISOString(),
     text: data.text,
